@@ -1,8 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://du7uywwmg5eh8"]
+[gd_scene load_steps=9 format=3 uid="uid://du7uywwmg5eh8"]
 
 [ext_resource type="PackedScene" uid="uid://dg8xbo15e6lmf" path="res://Scenes/ship/space_ship.tscn" id="1_dnj1o"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dqy1g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8ahk2"]
+noise = SubResource("FastNoiseLite_dqy1g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_76dh1"]
+albedo_texture = SubResource("NoiseTexture2D_8ahk2")
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_6heqs"]
+material = SubResource("StandardMaterial3D_76dh1")
+size = Vector2(30, 30)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xmoki"]
 ground_bottom_color = Color(0.741176, 0.65098, 0.4, 1)
