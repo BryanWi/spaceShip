@@ -1,10 +1,17 @@
-[gd_scene load_steps=9 format=3 uid="uid://du7uywwmg5eh8"]
+[gd_scene load_steps=11 format=3 uid="uid://du7uywwmg5eh8"]
 
 [ext_resource type="PackedScene" uid="uid://dg8xbo15e6lmf" path="res://Scenes/ship/space_ship.tscn" id="1_dnj1o"]
+
+[sub_resource type="Gradient" id="Gradient_cj222"]
+offsets = PackedFloat32Array(0, 0.246914, 0.407407, 0.62963, 0.876543)
+colors = PackedColorArray(0.346645, 1, 0.0999336, 1, 0.303084, 0.84375, 0.13205, 1, 0.335938, 0.249962, 0.0986114, 1, 0.345546, 0.338014, 0.248843, 1, 0.393587, 0.77827, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dqy1g"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8ahk2"]
+width = 1024
+height = 1024
+color_ramp = SubResource("Gradient_cj222")
 noise = SubResource("FastNoiseLite_dqy1g")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_76dh1"]
@@ -12,7 +19,11 @@ albedo_texture = SubResource("NoiseTexture2D_8ahk2")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6heqs"]
 material = SubResource("StandardMaterial3D_76dh1")
-size = Vector2(30, 30)
+size = Vector2(300, 300)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_23587"]
+margin = 2.415
+data = PackedVector3Array(150, 0, 150, -150, 0, 150, 150, 0, -150, -150, 0, 150, -150, 0, -150, 150, 0, -150)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xmoki"]
 ground_bottom_color = Color(0.741176, 0.65098, 0.4, 1)
@@ -23,14 +34,24 @@ sky_material = SubResource("ProceduralSkyMaterial_xmoki")
 [sub_resource type="Environment" id="Environment_kxj2d"]
 background_mode = 2
 sky = SubResource("Sky_ecs3t")
+fog_light_energy = 1.24
+fog_sun_scatter = 0.04
+fog_aerial_perspective = 0.132
+fog_height = 30.12
 
 [node name="testScene" type="Node3D"]
 
 [node name="spaceShip" parent="." instance=ExtResource("1_dnj1o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28916, 0)
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.44311, -0.443515, 0)
 mesh = SubResource("PlaneMesh_6heqs")
+
+[node name="StaticBody3d" type="StaticBody3D" parent="MeshInstance3d"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="MeshInstance3d/StaticBody3d"]
+shape = SubResource("ConcavePolygonShape3D_23587")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kxj2d")
@@ -38,3 +59,5 @@ environment = SubResource("Environment_kxj2d")
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.860093, 0.285546, -0.422734, 0, 0.828667, 0.559743, 0.510138, -0.481431, 0.71273, 0, 1.58823, 0)
 shadow_enabled = true
+
+[node name="Spaceships" type="Node3D" parent="."]

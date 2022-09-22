@@ -1,4 +1,5 @@
-extends RigidBody3D
+#extends RigidBody3D
+extends CharacterBody3D
 
 var acceleration = 5
 var speed_limit = 10
@@ -15,11 +16,14 @@ var damp_toggle:bool = false
 var x_dir
 var y_dir 
 var z_dir
+var roll_dir = 0
 var x_mouse = 0
+var y_mouse = 0
 
 func _ready():
-	gravity_scale = 0
+	#gravity_scale = 0
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -28,21 +32,16 @@ func _process(_delta):
 func _input(event : InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		x_mouse = event.relative.x
-		
-		#rotation.x += event.relative.x*roll_speed*0.001
-		#rotate_x(event.relative.x*roll_speed*0.001)
-		var a = event.relative.x*roll_speed*0.001
-		print(a)
-		rotate(basis.x,a)
-		#character.rotation.y -= event.relative.x * MOUSE_SENS * 0.001
-		#character.rotation.y = wrapf(character.rotation.y, 0.0, TAU)
+		y_mouse = event.relative.y
 
 func _physics_process(delta):
 	get_inputs()
 	
 	
 	vel += basis.x*acceleration*delta*x_dir
-	if (x_dir== 0) && (damp==true):
+	vel += basis.y*acceleration*delta*y_dir
+	vel += basis.z*acceleration*delta*z_dir
+	if (x_dir== 0) &&(y_dir== 0)&&(z_dir== 0) && (damp==true):
 		vel = Vector3(lerpf(vel.x,0.0,0.02),lerpf(vel.y,0.0,0.02),lerpf(vel.z,0.0,0.02))
 	if damp_toggle:
 		damp = !damp
@@ -53,20 +52,24 @@ func _physics_process(delta):
 	#vel = clamp(vel, -speed_limit,speed_limit)
 	
 	#rotation.y += delta*rotate_speed*z_dir
-	rotate(basis.y, delta*rotate_speed*z_dir)
+	rotate(basis.x, delta*rotate_speed*-roll_dir)
 	
-	var distance #= #vel * delta
-	distance = vel*delta
+	rotate(basis.y,-x_mouse * roll_speed*0.001*0.5)
+	rotate(basis.z,-y_mouse * roll_speed*0.001)
+	x_mouse = 0
+	y_mouse = 0
 	
-	#revisar como rotar 
-	#print(rotation.y)
-	#print(distance)
+	
+	var distance = vel*delta
 	move_and_collide(distance)
 
 func get_inputs():
 	x_dir = Input.get_axis("backward","forward")
 	y_dir = Input.get_axis("down","up")
 	z_dir = Input.get_axis("left","right")
+	roll_dir = Input.get_axis("q","e")
 	damp_toggle = Input.is_action_just_pressed("damp")
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if Input.is_action_just_pressed("left_click"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
