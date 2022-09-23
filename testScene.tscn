@@ -61,3 +61,5 @@ transform = Transform3D(0.860093, 0.285546, -0.422734, 0, 0.828667, 0.559743, 0.
 shadow_enabled = true
 
 [node name="Spaceships" type="Node3D" parent="."]
+
+[node name="GridMap" type="GridMap" parent="."]

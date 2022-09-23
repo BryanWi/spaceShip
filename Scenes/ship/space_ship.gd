@@ -73,7 +73,3 @@ func get_inputs():
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if Input.is_action_just_pressed("left_click"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-
-func _on_grid_map_cell_size_changed(cell_size):
-	pass # Replace with function body.
