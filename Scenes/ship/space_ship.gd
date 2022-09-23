@@ -52,10 +52,10 @@ func _physics_process(delta):
 	#vel = clamp(vel, -speed_limit,speed_limit)
 	
 	#rotation.y += delta*rotate_speed*z_dir
-	rotate(basis.x, delta*rotate_speed*-roll_dir)
+	rotate(basis.x.normalized(), delta*rotate_speed*-roll_dir)
 	
-	rotate(basis.y,-x_mouse * roll_speed*0.001*0.5)
-	rotate(basis.z,-y_mouse * roll_speed*0.001)
+	rotate(basis.y.normalized(),-x_mouse * roll_speed*0.001*0.5)
+	rotate(basis.z.normalized(),-y_mouse * roll_speed*0.001)
 	x_mouse = 0
 	y_mouse = 0
 	
@@ -73,3 +73,7 @@ func get_inputs():
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if Input.is_action_just_pressed("left_click"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _on_grid_map_cell_size_changed(cell_size):
+	pass # Replace with function body.
