@@ -1,0 +1,135 @@
+[gd_scene load_steps=15 format=3 uid="uid://cqsg2jhk6i7k7"]
+
+[ext_resource type="Shader" path="res://Scenes/maps/shader/terrain.gdshader" id="1_62f21"]
+[ext_resource type="PackedScene" uid="uid://dg8xbo15e6lmf" path="res://Scenes/ship/space_ship.tscn" id="2_lvqqw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c8hgs"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0, 0, 0, 1)
+sky_cover_modulate = Color(0, 0, 0, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_h8ar2"]
+sky_material = SubResource("ProceduralSkyMaterial_c8hgs")
+
+[sub_resource type="Environment" id="Environment_wswrp"]
+background_mode = 2
+sky = SubResource("Sky_h8ar2")
+tonemap_mode = 2
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+fog_light_energy = 0.0
+fog_density = 0.1433
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0, 0, 0.0901961, 1)
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_detail_spread = 0.5
+volumetric_fog_ambient_inject = 1.61
+volumetric_fog_sky_affect = 0.0
+adjustment_contrast = 7.09
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2wchn"]
+seed = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gjswy"]
+width = 2048
+height = 2048
+noise = SubResource("FastNoiseLite_2wchn")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_puyog"]
+seed = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pseg4"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_puyog")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wiieo"]
+render_priority = 0
+shader = ExtResource("1_62f21")
+shader_parameter/height_scale = 0.5
+shader_parameter/noise = SubResource("NoiseTexture2D_gjswy")
+shader_parameter/normalmap = SubResource("NoiseTexture2D_pseg4")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0gtbf"]
+material = SubResource("ShaderMaterial_wiieo")
+size = Vector2(3, 2)
+subdivide_width = 2400
+subdivide_depth = 2400
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cxdyb"]
+albedo_color = Color(1, 0.164706, 0.156863, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5qt3u"]
+material = SubResource("StandardMaterial3D_cxdyb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yrpu3"]
+albedo_color = Color(0.443137, 0.941176, 1, 1)
+
+[node name="shaderMap" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wswrp")
+
+[node name="MeshInstance3d" type="MeshInstance3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, -0.00479168, -11.438, 0.0062778)
+mesh = SubResource("PlaneMesh_0gtbf")
+
+[node name="MeshInstance3d2" type="MeshInstance3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, -50, 7.54979e-06, 0, -7.54979e-06, -50, -0.00479168, 41.2042, 0.0062778)
+visibility_range_end = 4096.0
+mesh = SubResource("PlaneMesh_0gtbf")
+
+[node name="OmniLight3d" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.6493, 5.38252, -0.0272994)
+visible = false
+light_color = Color(0.164706, 0.207843, 0.501961, 1)
+light_energy = 0.1
+shadow_enabled = true
+omni_range = 13.4758
+
+[node name="OmniLight3d2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.2462, 16.1772, -4.08147)
+visible = false
+light_color = Color(0.619608, 0.635294, 0.905882, 1)
+light_energy = 16.0
+omni_range = 39.7361
+
+[node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.949672, -0.143199, 0.278599, 0, 0.889392, 0.457145, -0.313247, -0.434137, 0.844631, 0, 1.075, 1.0556)
+visible = false
+shadow_enabled = true
+
+[node name="spaceShip" parent="." instance=ExtResource("2_lvqqw")]
+transform = Transform3D(-0.840065, -0.46729, 0.275556, -0.441982, 0.884085, 0.151808, -0.314553, 0.00573773, -0.949223, -25.1358, 7.65714, -16.0779)
+
+[node name="SpotLight3d" type="SpotLight3D" parent="spaceShip"]
+transform = Transform3D(-4.37114e-07, 1.49012e-08, -10, 0, 10, 1.49012e-08, 10, 5.55112e-16, -4.37114e-07, 0.664772, 0, 0)
+light_color = Color(0.933333, 0.956863, 0.788235, 1)
+light_energy = 4.33
+shadow_enabled = true
+distance_fade_begin = 0.0
+spot_range = 14.0176
+spot_attenuation = 1.1487
+spot_angle = 33.9955
+spot_angle_attenuation = 3.09849
+
+[node name="OmniLight3d" type="OmniLight3D" parent="spaceShip"]
+visible = false
+light_energy = 0.01
+
+[node name="MeshInstance3d3" type="MeshInstance3D" parent="."]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -61.5026, 5.1677, -10.887)
+mesh = SubResource("CapsuleMesh_5qt3u")
+
+[node name="MeshInstance3d4" type="MeshInstance3D" parent="MeshInstance3d3"]
+transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, 0.3, 0, -0.3, -1.31134e-08, 0.488667, 0.508639, 0)
+material_override = SubResource("StandardMaterial3D_yrpu3")
+mesh = SubResource("CapsuleMesh_5qt3u")
+skeleton = NodePath("../..")
