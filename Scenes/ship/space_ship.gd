@@ -30,7 +30,7 @@ func _process(_delta):
 	pass
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and (Input.mouse_mode==Input.MOUSE_MODE_CAPTURED):
 		x_mouse = event.relative.x
 		y_mouse = event.relative.y
 
