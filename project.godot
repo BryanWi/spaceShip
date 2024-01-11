@@ -6,7 +6,7 @@ config/name="Spaceship"
 run/main_scene="res://testScene.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://spaceshipIcon.png"
-config/tags=PackedStringArray("tech_demo")
+config/tags=PackedStringArray("legacy", "tech_demo")
 
 [dotnet]
 
